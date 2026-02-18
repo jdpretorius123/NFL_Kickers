@@ -1,0 +1,21 @@
+---
+title: "About the Project"
+about:
+  template: trestles
+  links:
+    - icon: github
+      text: GitHub
+      href: https://github.com/jdpretorius123
+    - icon: linkedin
+      text: LinkedIn
+      href: https://www.linkedin.com/in/justin-p-996555172/
+---
+
+## The Mission
+This project was born out of a desire to understand the high-stakes world of NFL kicking.
+
+## The Tech Stack
+* **Language:** R
+* **Engine:** Quarto
+* **Key Packages:** `tidyverse`, `plotly`, `nflreadR`
+* **Automation:** PowerShell scripts for weekly data updates.

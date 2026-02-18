@@ -2,8 +2,10 @@ project:
   type: website
   output-dir: docs
   render:
-    - "*.qmd"
-    - "blogs/"
+    - "index.qmd"
+    - "about.qmd"
+    - "blogs/*.qmd"
+    - "!wip_blogs/"
     - "!eda/"
 
 website:
