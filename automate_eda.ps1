@@ -36,12 +36,12 @@ try {
 
 	$cleaning_script = "$project_root\cleaning\cleaning.R"
 
-	$pbp_plot_file = "C:/Users/justi/Desktop/pbp_plot.csv"
-	$stats_plot_file = "C:/Users/justi/Desktop/stats_plot.csv"
+	$pbp_plot_file = "C:\Users\justi\Desktop\pbp_plot.csv"
+	$stats_plot_file = "C:\Users\justi\Desktop\stats_plot.csv"
 
-	$report_script = "./eda/eda.Rmd"
+	$report_script = ".\eda\eda.qmd"
 	$report_name = "EDA_$(Get-Date -Format 'yyyy-MM-dd').html"
-	$output_dir = "./eda"
+	$output_dir = ".\eda"
 
 	# Checking the existence of the ETL script
 	if (Test-Path $etl_script) {
@@ -85,7 +85,12 @@ try {
 	Write-Host "Generating the EDA report..." -ForegroundColor Cyan
 	try {
 
-		Rscript -e "rmarkdown::render('$report_script', params = list(pbp_plot_file = normalizePath('$pbp_plot_file'), stats_plot_file = normalizePath('$stats_plot_file')), output_file = '$report_name', output_dir = '$output_dir')"
+		quarto render "$report_script" `
+		  -P pbp_plot_file: "$pbp_plot_file" `
+		  -P stats_plot_file: "$stats_plot_file" `
+		  --output "$report_name" `
+		  --output-dir "$output_dir"
+		  
 		if ($LASTEXITCODE -eq 0) {
 			Write-Host "Success: EDA report generated successfully." -ForegroundColor Green
 
@@ -103,7 +108,7 @@ try {
 			}
 		}
 		else {
-			Write-Error "Failure: R encountered an error during rendering. Check your Rmd code logic."
+			Write-Error "Failure: R encountered an error during rendering. Check your qmd code logic."
 		}
 	}
 	catch {
