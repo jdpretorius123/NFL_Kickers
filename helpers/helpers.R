@@ -326,3 +326,87 @@ download_link = function(data, filename = 'pbp_endpoints.csv') {
   )
 }
 # -------------------------------------------------------------------------
+# Dynamic Line Plot -----------------------------------------------------
+
+dynamic_line_plot = function(df, x_cols, y_cols) {
+  #' Create line plots using a dataset (df) and any time vars (x_cols) and
+  #' numeric cols (y_cols) that you fancy.
+  #'
+  #' @param df Dataset
+  #' @param x_cols (character): Vector naming x-axis time variables of interest
+  #' @param y_cols (character): Vector naming y-axis variables of interest
+  #' @return p Interactive plotly line plot with a dropdown menu for variable
+  #'  selection
+  init_x = x_cols[1]
+  init_y = y_cols[1]
+  
+  p = plot_ly(
+    data = df,
+    x = ~get(init_x),
+    y = ~get(init_y),
+    type = 'scatter',
+    mode = 'lines+markers',
+    marker = list(size = 10, opacity = 0.5),
+    hovertemplate = paste0(
+      create_label(init_x), ': %{x}<br>',
+      create_label(init_y), ': %{y}<extra></extra>'
+    )
+  )
+  
+  y_buttons = lapply(y_cols, function(col) {
+    y_label = create_label(col)
+    list(
+      method = 'update',
+      args = list(
+        list(y = list(df[[col]])),
+        list(yaxis = list(title = y_label))
+      ),
+      label = y_label
+    )
+  })
+  
+  x_buttons = lapply(x_cols, function(col) {
+    x_label = create_label(col)
+    list(
+      method = 'update',
+      args = list(
+        list(x = list(df[[col]])),
+        list(xaxis = list(title = x_label))
+      ),
+      label = x_label
+    )
+  })
+  
+  p %>%
+    layout(
+      xaxis = list(title = create_label(init_x)),
+      yaxis = list(title = create_label(init_y)),
+      showlegend = FALSE,
+      updatemenus = list(
+        list(
+          buttons = y_buttons,
+          x = 0.3, y = 1.2,
+          xanchor = 'left', yanchor = 'top'
+        ),
+        list(
+          buttons = x_buttons,
+          x = 0.6, y = 1.2,
+          xanchor = 'left', yanchor = 'top'
+        )
+      )
+    ) %>%
+    add_annotations(
+      text = 'Select Y:',
+      x = 0.15, y = 1.15,
+      xref = 'paper', yref = 'paper',
+      showarrow = FALSE
+    ) %>%
+    add_annotations(
+      text = 'Select X:',
+      x = 0.5, y = 1.15,
+      xref = 'paper', yref = 'paper',
+      showarrow = FALSE
+    )
+}
+
+# -------------------------------------------------------------------------

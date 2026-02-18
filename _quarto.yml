@@ -1,0 +1,23 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+    - "blogs/"
+    - "!eda/"
+
+website:
+  title: "NFL Kickers"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: about.qmd
+        text: About
+
+format:
+  html:
+    theme: journal
+    css: css/styles.css    
+    embed-resources: true
+    toc: true
